@@ -60,5 +60,3 @@ $ git log --oneline --graph     # 輸出的結果更為精簡，可以一次看�
 $ git log --oneline --author="Sherly"           # 只會顯示這個人的 commit
 $ git log --oneline --author="Sherly\|Eddie"    # 使用 | 符號來查找兩個以上
 ```
-
-## 測試
