@@ -174,10 +174,8 @@ $ git reset ORIG_HEAD --hard
 ```
 
 ---
-<<<<<<< HEAD
 
 ## 參考
 
 [為你自己學 Git](https://gitbook.tw/ "link")
-=======
->>>>>>> a69fa50b29bbf56dea6bfa59dd0c6497790a93ff
+
