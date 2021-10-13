@@ -11,7 +11,7 @@ $ git init                 # 讓 Git 對這個目錄開始進行版控
 
 ## 取消 GIT 控制
 
-> ### 只要把那個 `.git 目錄` 移除，Git 就對這個目錄失去控制權了。
+-   只要把那個 `.git 目錄` 移除，Git 就對這個目錄失去控制權了。
 
 ---
 
@@ -80,6 +80,19 @@ $ git log --oneline --since="9am" --until="12am"                       # 可以�
 $ git log --oneline --since="9am" --until="12am" --after="2017-01"     # 還可以再加一個 after
 ```
 
+## 檢視特定檔案的歷史紀錄
+
+```
+$ git log -p welcome.html     # log 後面直接接檔名，-p 會再更詳細列出資訊
+```
+
+## 檢視某個檔案的某一行是誰寫的
+
+```
+$ git blame welcome.html             # 會在這行程式碼前面出現識別代號
+$ git blame -L 5,10 welcome.html     # -L 可以控制顯示的行列數
+```
+
 ---
 
 ## 在 Git 裡刪除檔案
@@ -107,14 +120,14 @@ $ git mv hello.html world.html     # 使用 Git 裡面改名稱，效果跟上�
 
 ---
 
-## 修改 Commit 紀錄
+## 修改 Commit 內容敘述
 
--   要修改 Commit 紀錄有好幾種方法：
-    1.  使用 `git rebase` 來修改歷史。
+-   要修改 Commit 內容敘述有好幾種方法：
+    1.  使用 `git rebase` 來修改。
     2.  先把 Commit 用 `git reset` 拆掉，整理後再重新 Commit。
     3.  使用 `--amend` 參數來修改最後一次的 Commit。
 
-## 使用 `--amend` 參數來進行 Commit
+## 使用 `--amend` 參數來修改 Commit 內容敘述
 
 ```
 $ git log --oneline     # 這是原來的
@@ -134,7 +147,7 @@ $ git log --oneline     # 改過來了
 657fce7 add container
 ```
 
-## 使用 `rebase` 來進行 Commit
+## 使用 `rebase` 來修改 Commit 內容敘述
 
 ```
 $ git log --oneline
@@ -175,7 +188,7 @@ $ git reset ORIG_HEAD --hard
 
 ## 追加檔案到最近一次的 Commit
 
--   所以如果不想因此再發一次 Commit，想把這個檔案併入最近一次 Commit，可以這樣做：
+-   如果不想因此再發一次 Commit，想把這個檔案併入最近一次 Commit，可以這樣做：
     1. 使用 `git reset` 把最後一次的 Commit 拆掉，加入新檔案後再重新 Commit。
     2. 使用 `--amend` 參數進行 Commit。
 
@@ -186,6 +199,58 @@ $ git commit --amend --no-edit      # --no-edit 參數的意思是指「我不�
 ```
 
 ---
+
+## 回復被刪除的檔案或目錄
+
+```
+$ git checkout welcome.html     # 回復特定檔案到上一次 Commit 的狀態
+$ git checkout .                # 回復所有被刪除的檔案到上一次 Commit 的狀態
+```
+
+-   當使用 git checkout 分支名稱 的時候，Git 會切換到指定的分支，但如果後面接的是檔名或路徑，Git 則不會切換分支，而是把檔案從 .git 目錄裡拉一份到目前的工作目錄。
+
+```
+$ git checkout HEAD~2 welcome.html     # 這樣會回復到上上一次 Commit 的狀態
+$ git checkout HEAD~2 .
+```
+
+## 回復檔案狀態到之前的版本
+
+-   `Reset` 這個英文單字的翻譯是「重新設定」，用中文來說比較像是「前往」或「變成」，指令應該要解讀成「我要前往前幾個 Commit 之前的狀態」或是「我要變成前幾個 Commit 之前的狀態」。
+
+```
+$ git reset e12d8ef^     # e12d8ef 是指在 e12d8ef 這個 Commit 的前一次
+$ git reset e12d8ef^^    # 前兩次
+$ git reset e12d8ef~5    # 前五次
+```
+
+-   而且因為剛好 `HEAD` 跟 `master` 目前都是指向 `e12d8ef` 這個 Commit，而且 `e12d8ef` 這個數字也不好記，所以上面這行，通常也會改寫成：
+
+```
+$ git reset master^
+$ git reset HEAD^
+```
+
+-   也可以直接指名某個版本:
+
+```
+$ git reset 版本號
+```
+
+-   git reset 指令可以搭配參數使用，常見到的三種參數，分別是 `--mixed`、`--soft` 以及 `--hard`，這會決定拆出來的檔案回留在哪裡:
+
+|    Soft    |  Mix(預設)   |   Hard   |
+| :--------: | :----------: | :------: |
+| 丟回暫存區 | 丟回工作目錄 | 直接丟掉 |
+
+## 又想要回到後面的版本
+
+-   先使用 `git reflog` 或 `git log -g` 來查看最近的紀錄， 當 `HEAD` 有移動的時候（例如切換分支或是 `reset` 都會造成 `HEAD` 移動），Git 就會在 `Reflog` 裡記上一筆。
+-   如果想要退回剛剛 `Reset` 的這個步驟，只要 `Reset` 回到一開始那個 Commit 的 `e12d8ef` 就行了：
+
+```
+$ git reset e12d8ef --hard
+```
 
 ## 參考
 
