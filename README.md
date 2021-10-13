@@ -11,7 +11,7 @@ $ git init                 # 讓 Git 對這個目錄開始進行版控
 
 ## 取消 GIT 控制
 
-> ### 只要把那個 **.git 目錄** 移除，Git 就對這個目錄失去控制權了。
+> ### 只要把那個 `.git 目錄` 移除，Git 就對這個目錄失去控制權了。
 
 ---
 
@@ -90,13 +90,13 @@ $ git rm welcome.html     # 用 Git 指令，可以連 Add 的動作一起包含
 
 ```
 
-## 加上 –cached 參數
+## 加上 `--cached` 參數
 
 ```
 $ git rm welcome.html --cached
 ```
 
--   如果只是「我不是真的想把這個檔案刪掉，只是不想讓這個檔案再被 Git 控管了」的話，可以加上 --cached 參數
+-   如果只是「我不是真的想把這個檔案刪掉，只是不想讓這個檔案再被 Git 控管了」的話，可以加上 `--cached` 參數
 
 ## 修改名稱
 
@@ -110,11 +110,11 @@ $ git mv hello.html world.html     # 使用 Git 裡面改名稱，效果跟上�
 ## 修改 Commit 紀錄
 
 -   要修改 Commit 紀錄有好幾種方法：
-    -   使用 git rebase 來修改歷史。
-    -   先把 Commit 用 git reset 拆掉，整理後再重新 Commit。
-    -   使用 --amend 參數來修改最後一次的 Commit。
+    1.  使用 `git rebase` 來修改歷史。
+    2.  先把 Commit 用 `git reset` 拆掉，整理後再重新 Commit。
+    3.  使用 `--amend` 參數來修改最後一次的 Commit。
 
-## 使用 --amend 參數來進行 Commit
+## 使用 `--amend` 參數來進行 Commit
 
 ```
 $ git log --oneline     # 這是原來的
@@ -134,7 +134,7 @@ $ git log --oneline     # 改過來了
 657fce7 add container
 ```
 
-## 使用 rebase 來進行 Commit
+## 使用 `rebase` 來進行 Commit
 
 ```
 $ git log --oneline
@@ -150,9 +150,9 @@ bb0c9c2 init commit
 $ git rebase -i bb0c9c2
 ```
 
--   -i 參數是指要進入 Rebase 指令的「互動模式」，而後面的 bb0c9c2 是指這次的 Rebase 指令的應用範圍會「從現在到 bb0c9c2 這個 Commit」，也就是最一開始的那個 Commit，這個指令會跳出編輯器。
--   上面的順序，跟 git log 指令的結果是相反的
--   前面的 pick 的意思是「保留這次的 Commit，不做修改」。
+-   `-i` 參數是指要進入 `Rebase` 指令的「互動模式」，而後面的 bb0c9c2 是指這次的 `Rebase` 指令的應用範圍會「從現在到 bb0c9c2 這個 Commit」，也就是最一開始的那個 Commit，這個指令會跳出編輯器。
+-   上面的順序，跟 `git log` 指令的結果是相反的
+-   前面的 `pick` 的意思是「保留這次的 Commit，不做修改」。
 
 ```
 pick cd82f29 add cat 1
@@ -167,8 +167,26 @@ reword 1de2076 add cat 2
 -   說明等一下會修改這兩個 Commit。
 -   離開編輯器會馬上再跳出一個，在這裡修改 Commit 的內容，第二個也一樣後存檔離開編輯器。
 
-## 回到 rebase 之前
+## 回到 `rebase` 之前
 
 ```
 $ git reset ORIG_HEAD --hard
 ```
+
+## 追加檔案到最近一次的 Commit
+
+-   所以如果不想因此再發一次 Commit，想把這個檔案併入最近一次 Commit，可以這樣做：
+    1. 使用 `git reset` 把最後一次的 Commit 拆掉，加入新檔案後再重新 Commit。
+    2. 使用 `--amend` 參數進行 Commit。
+
+例如，我有一個檔案叫做 cinderella.html，想把它加到最後一次的 Commit 裡，假設它剛加進來，它的狀態還是 `Untracked`，流程上一樣，還是使用 `git add` 先把檔案加到暫存區，接著在 Commit 的時候加上 `--amend` 參數
+
+```
+$ git commit --amend --no-edit      # --no-edit 參數的意思是指「我不要編輯 Commit 訊息」
+```
+
+---
+
+## 參考
+
+[為你自己學 Git](https://gitbook.tw/ "link")
